@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import { MongoClient } from "mongodb";
 import path from "path";
 import mongoose from "mongoose";
 import productRouter from "./routes/product-router";
@@ -11,7 +10,8 @@ import { errors } from "celebrate";
 import errorHandler from "./middlewares/error-handler";
 
 dotenv.config();
-const dbAddress = process.env.DB_ADDRESS || "mongodb://127.0.0.1:27017/weblarek";
+const dbAddress =
+  process.env.DB_ADDRESS || "mongodb://127.0.0.1:27017/weblarek";
 const port = process.env.PORT || 3000;
 
 const app = express();
@@ -31,10 +31,6 @@ app.use("/order", orderRouter);
 app.use(errors());
 app.use(errorLogger);
 app.use(errorHandler);
-
-app.get("/", (req, res) => {
-  res.send("Server is running!");
-});
 
 // подключение к БД и запуск
 mongoose

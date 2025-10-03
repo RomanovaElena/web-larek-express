@@ -1,24 +1,24 @@
-import winston from 'winston';
-import expressWinston from 'express-winston';
+import winston from "winston";
+import expressWinston from "express-winston";
 
 //логгер запросов
 export const requestLogger = expressWinston.logger({
-  level: 'info',
+  level: "info",
   format: winston.format.json(),
-  transports: [new winston.transports.File({ filename: 'request.log' })],
+  transports: [new winston.transports.File({ filename: "request.log" })],
   meta: true,
-  msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
+  msg: "HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms",
 });
 
 // логгер ошибок
 export const errorLogger = expressWinston.errorLogger({
-  level: 'error',
+  level: "error",
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
     winston.format.json()
   ),
-  transports: [new winston.transports.File({ filename: 'error.log' })],
+  transports: [new winston.transports.File({ filename: "error.log" })],
   meta: true,
-  msg: 'ERROR {{err.message}}',
+  msg: "ERROR {{err.message}}",
 });

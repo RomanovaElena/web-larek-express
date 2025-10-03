@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 interface IProduct {
   title: string;
   image: {
-    fileName: string,
+    fileName: string;
     originalName: string;
-  }
+  };
   category: string;
   description: string;
   price: number | null;
@@ -37,7 +37,7 @@ const productSchema = new mongoose.Schema<IProduct>({
   price: {
     type: Number,
     required: false,
-  }
-})
+  },
+});
 
-export default mongoose.model<IProduct>('product', productSchema);
+export default mongoose.model<IProduct>("product", productSchema);
