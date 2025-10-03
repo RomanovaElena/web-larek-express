@@ -1,14 +1,14 @@
-import { Request, Response, NextFunction } from "express";
-import { faker } from "@faker-js/faker";
-import Products from "../models/product";
-import BadRequestError from "../errors/bad-request-error";
-import NotFoundError from "../errors/not-found-error";
-import InternalServerError from "../errors/internal-server-error";
+import { Request, Response, NextFunction } from 'express';
+import { faker } from '@faker-js/faker';
+import Products from '../models/product';
+import BadRequestError from '../errors/bad-request-error';
+import NotFoundError from '../errors/not-found-error';
+import InternalServerError from '../errors/internal-server-error';
 
-export const createOrder = async (
+const createOrder = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { total, items } = req.body;
@@ -20,7 +20,7 @@ export const createOrder = async (
       const foundedIds = products.map((p) => p._id.toString());
       const missingIds = items.filter((id: string) => !foundedIds.includes(id));
       return next(
-        new NotFoundError(`Товары с id ${missingIds.join(", ")} не найдены`)
+        new NotFoundError(`Товары с id ${missingIds.join(', ')} не найдены`),
       );
     }
 
@@ -31,15 +31,15 @@ export const createOrder = async (
         new BadRequestError(
           `Следующие товары не продаются: ${unavailable
             .map((p) => p._id)
-            .join(", ")}`
-        )
+            .join(', ')}`,
+        ),
       );
     }
 
     // проверяем total
     const sum = products.reduce((acc, p) => acc + (p.price ?? 0), 0);
     if (sum !== total) {
-      return next(new BadRequestError("Неверная сумма заказа"));
+      return next(new BadRequestError('Неверная сумма заказа'));
     }
 
     // генерируем ID заказа
@@ -47,6 +47,8 @@ export const createOrder = async (
 
     return res.status(201).json({ id: orderId, total });
   } catch (err) {
-    return next(new InternalServerError("Ошибка сервера при создании заказа"));
+    return next(new InternalServerError('Ошибка сервера при создании заказа'));
   }
 };
+
+export default createOrder;
