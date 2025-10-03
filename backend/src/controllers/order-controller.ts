@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { faker } from '@faker-js/faker';
 import Products from '../models/product';
 import BadRequestError from '../errors/bad-request-error';
-import NotFoundError from '../errors/not-found-error';
 import InternalServerError from '../errors/internal-server-error';
 
 const createOrder = async (
@@ -20,7 +19,7 @@ const createOrder = async (
       const foundedIds = products.map((p) => p._id.toString());
       const missingIds = items.filter((id: string) => !foundedIds.includes(id));
       return next(
-        new NotFoundError(`Товары с id ${missingIds.join(', ')} не найдены`),
+        new BadRequestError(`Товары с id ${missingIds.join(', ')} не найдены`),
       );
     }
 
@@ -45,7 +44,7 @@ const createOrder = async (
     // генерируем ID заказа
     const orderId = faker.string.uuid();
 
-    return res.status(201).json({ id: orderId, total });
+    return res.status(200).json({ id: orderId, total });
   } catch (err) {
     return next(new InternalServerError('Ошибка сервера при создании заказа'));
   }
